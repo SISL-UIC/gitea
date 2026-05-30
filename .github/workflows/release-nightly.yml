@@ -3,6 +3,7 @@ name: release-nightly
 on:
   push:
     branches: [main, release/v*]
+  workflow_dispatch: {}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -10,7 +11,7 @@ concurrency:
 
 jobs:
   nightly-binary:
-    runs-on: namespace-profile-gitea-release-binary
+    runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
@@ -70,7 +71,7 @@ jobs:
           aws s3 sync dist/release "s3://$AWS_S3_BUCKET/gitea/$BRANCH" --no-progress
 
   nightly-container:
-    runs-on: namespace-profile-gitea-release-docker
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write # to publish to ghcr.io
